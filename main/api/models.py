@@ -20,14 +20,16 @@ class Listing(models.Model):
     
     # Core data
     address = models.CharField(max_length=200)
+    price = models.IntegerField()
     description = models.CharField(max_length=3000)
     date_posted = models.DateField()
-    date_available = models.CharField(max_length=50)
+    date_available = models.DateField()
 
     # Optional data (based on the listing website)
     category_type = models.CharField(max_length=100, blank=True)
     bedroom_count = models.IntegerField(null=True, blank=True)
-    bathroom_count = models.FloatField(null=True, blank=True)
+    bathroom_count = models.IntegerField(null=True, blank=True)
+    has_half_bedroom = models.BooleanField(null=True, blank=True)
     utilities = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
