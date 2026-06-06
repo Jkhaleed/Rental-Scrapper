@@ -1,7 +1,7 @@
 import pandas as pd
 
-from scrapers.the_cannon import scrape_the_cannon
-from scrapers.places4students import scrape_places4students
+from Scraper.the_cannon import scrape_the_cannon
+from Scraper.places4students import scrape_places4students
 
 all_listings = []
 
