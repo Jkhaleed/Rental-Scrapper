@@ -1,9 +1,10 @@
 name: Update Rental Listings
 
 on:
+  workflow_dispatch:
+
   schedule:
     - cron: "*/30 * * * *"
-  workflow_dispatch:
 
 permissions:
   contents: write
@@ -13,20 +14,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-      - uses: actions/setup-python@v5
+      - name: Set Up Python
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
-      - run: pip install -r requirements.txt
-
-      - run: python main.py
-
-      - name: Commit changes
+      - name: Install Dependencies
         run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add houses.csv
-          git commit -m "Update rental listings" || echo "No changes"
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Scraper
+        run: |
+          python main.py
+
+      - name: Commit Updated Listings
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@github.com"
+
+          git add .
+
+          git diff --staged --quiet || git commit -m "Automated rental listing update"
+
           git push
