@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import pandas as pd
+import re
 
 guelph_rental_url = "https://thecannon.ca/classified/housing/93144/"
 HEADERS = {
@@ -57,15 +58,23 @@ while True:
         price_tag = house.find("li", class_="price")
         posted_tag = house.find("li", class_="post-date")
         description_tag = house.find("div", class_="description")
+        desc = description_tag.text.strip() if description_tag else "N/A"
         item = {
-            "Title":title_tag.find("a").text.strip() if title_tag else "N/A",
+           "Title":title_tag.find("a").text.strip() if title_tag else "N/A",
             "Link": link_tag.attrs["href"] if link_tag else "N/A",
             "Price":price_tag.find("dd").text.strip() if price_tag else "N/A",
             "Posted":posted_tag.find("dd").text.strip() if posted_tag else "N/A",
-            "Description":description_tag.text.strip() if description_tag else "N/A"
+            "Description":desc
+
 
         }
+        bedrooms = re.search(r'(\d+)\s*bed(room)?s?', desc, re.I)
+        bathrooms = re.search(r'(\d+(\.\d+)?)\s*bath(room)?s?', desc, re.I)
+        utilities = bool(re.search(r'(utilities included|all utilities paid)', desc, re.I))
 
+        item['Bedrooms']= bedrooms.group(1) if bedrooms else "N/A"
+        item['Bathrooms'] = bathrooms.group(1) if bathrooms else "N/A"
+        item['Utilities Included'] = utilities
 
         data.append(item)
 
