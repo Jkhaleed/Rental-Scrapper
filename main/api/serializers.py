@@ -7,6 +7,7 @@ class ListingSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'link',
+            'scraper',
             'status',
             'price',
             'address',

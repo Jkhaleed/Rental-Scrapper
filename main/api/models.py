@@ -20,7 +20,7 @@ class Listing(models.Model):
     
     # Core data
     address = models.CharField(max_length=200)
-    price = models.IntegerField()
+    price = models.IntegerField(null=True, blank=True)
     description = models.CharField(max_length=3000)
     date_posted = models.DateField()
     date_available = models.DateField()

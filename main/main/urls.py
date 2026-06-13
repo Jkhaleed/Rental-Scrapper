@@ -17,12 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework import routers
-from api.views import ListingViewSet
-
-listing_router = routers.DefaultRouter()
-listing_router.register(r'listings', ListingViewSet, basename='listing')
 
 urlpatterns = [
-    path('api/admin/', admin.site.urls),
-    path('api/', include(listing_router.urls)),
+    path("admin/", admin.site.urls),
+    path("api/", include("api.urls")),
 ]

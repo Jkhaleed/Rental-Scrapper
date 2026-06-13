@@ -1,17 +1,14 @@
-from django.shortcuts import render
-from rest_framework import viewsets, permissions, filters
-from api.models import Listing
-from api.serializers import ListingSerializer
-from rest_framework import filters
-from api.filters import GuelphFilter
+from rest_framework.generics import ListAPIView
+from rest_framework import viewsets
+from .models import Listing
+from .serializers import ListingSerializer
 
 
-# Create your views here.
-class ListingViewSet(viewsets.ReadOnlyModelViewSet):
-    queryset = Listing.objects.all()
+class ListingListView(ListAPIView):
+    queryset = Listing.objects.all().order_by("-date_posted")
     serializer_class = ListingSerializer
-    
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    filterset_class = GuelphFilter
-    #filterset_fields = ('price', 'date_posted', 'bedroom_count', 'bathroom_count', 'utilities')
-    #filter_backends = []
+
+
+class ListingViewSet(viewsets.ModelViewSet):
+    queryset = Listing.objects.all().order_by("-date_posted")
+    serializer_class = ListingSerializer
